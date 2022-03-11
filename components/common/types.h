@@ -67,7 +67,7 @@ typedef	u16	wchar_t;
 
 #ifndef WIN32
 #ifndef USE_FREE_RTOS
-typedef u32 size_t;
+// typedef u32 size_t;
 #endif
 #endif
 
