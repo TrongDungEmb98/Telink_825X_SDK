@@ -35,7 +35,7 @@ void random_generator_init(void);
  * @param[in] none.
  * @return    the value of one random number.
  */
-unsigned int rand(void);
+int rand(void);
 
 /**
  * @brief     This function performs to get a serial of random number.

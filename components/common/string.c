@@ -40,7 +40,7 @@ char * strchr(const char *s, int c) {
 	return (0);
 }
 
-int memcmp(const void * m1, const void *m2, u32 len) {
+int memcmp(const void * m1, const void *m2, size_t len) {
 	u8 *st1 = (u8 *) m1;
 	u8 *st2 = (u8 *) m2;
 
@@ -54,7 +54,7 @@ int memcmp(const void * m1, const void *m2, u32 len) {
 	return 0;
 }
 
-void * memchr(register const void * src_void, int c, unsigned int length) {
+void * memchr(register const void * src_void, int c, size_t length) {
 	const unsigned char *src = (const unsigned char *) src_void;
 
 	while (length-- > 0) {
@@ -65,7 +65,7 @@ void * memchr(register const void * src_void, int c, unsigned int length) {
 	return NULL;
 }
 
-void * memmove(void * dest, const void * src, unsigned int n) {
+void * memmove(void * dest, const void * src, size_t n) {
 	char * d = (char *)dest;
 	char * s = (char *)src;
 
@@ -91,35 +91,35 @@ void bcopy(register char * src, register char * dest, int len) {
 	bbcopy(src, dest, len);
 }
 
-void * memset(void * dest, int val, unsigned int len) {
+void * memset(void * dest, int val, size_t len) {
 	register unsigned char *ptr = (unsigned char*) dest;
 	while (len-- > 0)
 		*ptr++ = (unsigned char)val;
 	return dest;
 }
 
-void * memcpy(void * out, const void * in, unsigned int length) {
+void * memcpy(void * out, const void * in, size_t length) {
 	bcopy((char *) in, (char *) out, (int) length);
 	return out;
 }
 
 // for performance, assume lenght % 4 == 0,  and no memory overlapped
-void memcpy4(void * d, const void * s, unsigned int length){
+void memcpy4(void * d, const void * s, size_t length){
 	int* dst = (int*)d;
 	int* src = (int*)s;
 	assert((((int)dst) >> 2) << 2 == ((int)dst));			// address must alighn to 4
 	assert((((int)src) >> 2) << 2 == ((int)src));			// address must alighn to 4
 	assert((length >> 2) << 2 == length);					// lenght % 4 == 0
 	assert(( ((char*)dst) + length <= (const char*)src) || (((const char*)src) + length <= (char*)dst));	//  no overlapped
-	unsigned int len = length >> 2;
+	size_t len = length >> 2;
 	while(len --){
 		*dst++ = *src++;
 	}
 }
 
-unsigned int strlen(const char *str) {
+size_t strlen(const char *str) {
 
-	unsigned int len = 0;
+	size_t len = 0;
 
 	if (str != NULL) {
 		while (*str++) {
@@ -186,9 +186,9 @@ char *strstr(const char* src, const char *sub)
     return 0;
 }
 
-char * strncpy(char *s, const char *t, unsigned int n) {
+char * strncpy(char *s, const char *t, size_t n) {
 	char *p = s;
-	unsigned int i = 0;
+	size_t i = 0;
 
 	if (!s)
 		return s;
@@ -206,7 +206,7 @@ char * strncpy(char *s, const char *t, unsigned int n) {
 	return p;
 }
 
-int ismemzero4(void *data, unsigned int len){
+int ismemzero4(void *data, size_t len){
 	int *p = (int*)data;
 	len = len >> 2;
 	for(int i = 0; i < len; ++i){
@@ -218,7 +218,7 @@ int ismemzero4(void *data, unsigned int len){
 	return 1;
 }
 
-int ismemf4(void *data, unsigned int len){
+int ismemf4(void *data, size_t len){
 	int *p = (int*)data;
 	len = len >> 2;
 	for(int i = 0; i < len; ++i){
@@ -230,7 +230,7 @@ int ismemf4(void *data, unsigned int len){
 	return 1;
 }
 
-void * memset4(void * dest, int val, unsigned int len) {
+void * memset4(void * dest, int val, size_t len) {
 	int *p = (int*)dest;
 	len = len >> 2;
 	for(int i = 0; i < len; ++i){
@@ -239,7 +239,46 @@ void * memset4(void * dest, int val, unsigned int len) {
 	return dest;
 }
 
-void zeromem4(void *data, unsigned int len){
+void zeromem4(void *data, size_t len){
 	memset4(data, 0, len);
 }
 
+
+int strncmp (const char *s1, const char *s2, size_t n)
+{
+  unsigned char c1 = '\0';
+  unsigned char c2 = '\0';
+  if (n >= 4)
+    {
+      size_t n4 = n >> 2;
+      do
+        {
+          c1 = (unsigned char) *s1++;
+          c2 = (unsigned char) *s2++;
+          if (c1 == '\0' || c1 != c2)
+            return c1 - c2;
+          c1 = (unsigned char) *s1++;
+          c2 = (unsigned char) *s2++;
+          if (c1 == '\0' || c1 != c2)
+            return c1 - c2;
+          c1 = (unsigned char) *s1++;
+          c2 = (unsigned char) *s2++;
+          if (c1 == '\0' || c1 != c2)
+            return c1 - c2;
+          c1 = (unsigned char) *s1++;
+          c2 = (unsigned char) *s2++;
+          if (c1 == '\0' || c1 != c2)
+            return c1 - c2;
+        } while (--n4 > 0);
+      n &= 3;
+    }
+  while (n > 0)
+    {
+      c1 = (unsigned char) *s1++;
+      c2 = (unsigned char) *s2++;
+      if (c1 == '\0' || c1 != c2)
+        return c1 - c2;
+      n--;
+    }
+  return c1 - c2;
+}
