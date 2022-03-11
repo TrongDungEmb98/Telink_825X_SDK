@@ -25,6 +25,7 @@
 #define PHY_TEST_H_
 
 #include "tl_common.h"
+#include <stdbool.h>
 
 #ifndef			PHYTEST_MODE_DISABLE
 #define			PHYTEST_MODE_DISABLE					0

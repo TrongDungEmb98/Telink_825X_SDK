@@ -2,6 +2,8 @@
 #include "drivers.h"
 
 #include "tinyFlash.h"
+#include <string.h>
+#include <stdbool.h>
 
 #define TINY_SECTOR_SIZE 4096 //flash扇区大小
 #define TINY_BUFFER_SIZE 256  //tiny缓冲区大小

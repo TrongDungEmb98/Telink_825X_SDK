@@ -44,8 +44,7 @@ typedef unsigned long long u64;
 #endif
 
 #ifndef __cplusplus
-
-typedef u8 bool;
+// typedef u8 bool;
 
 #ifndef FALSE
 #define FALSE 	0
@@ -54,8 +53,8 @@ typedef u8 bool;
 #define TRUE 	(!FALSE)
 #endif
 
-#define false 	FALSE
-#define true 	TRUE
+// #define false 	FALSE
+// #define true 	TRUE
 
 #endif
 

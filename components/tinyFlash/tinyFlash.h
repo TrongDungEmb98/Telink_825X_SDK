@@ -1,6 +1,6 @@
 #ifndef __tiny_Flash__
 #define __tiny_Flash__
-
+#include <stdbool.h>
 bool  tinyFlash_Init(unsigned long start_addr, unsigned long len);
 		
 int tinyFlash_Read(unsigned char KEY, unsigned char * buf, unsigned char * len);
