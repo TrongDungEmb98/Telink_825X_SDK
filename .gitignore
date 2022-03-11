@@ -3,3 +3,4 @@ components/mesh
 example/mesh
 example/*/out
 study/*/out
+make/__pycache__/

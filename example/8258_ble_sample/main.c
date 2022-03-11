@@ -24,8 +24,17 @@
 #include "drivers.h"
 #include "stack/ble/ble.h"
 #include "vendor/common/user_config.h"
+#include "vendor/common/blt_soft_timer.h"
+#include "drivers.h"
+#include "drivers/8258/gpio_8258.h"
+#include "app_config.h"
+#include "drivers.h"
+#include "drivers/8258/gpio_8258.h"
 
-
+#include "tl_common.h"
+#include "stack/ble/ble.h"
+#include "vendor/common/user_config.h"
+#include "vendor/common/blt_soft_timer.h"
 
 extern void user_init_normal();
 extern void user_init_deepRetn();
@@ -41,7 +50,11 @@ _attribute_ram_code_ void irq_handler(void)
 }
 
 
-
+int gpio_test1(void)
+{
+    gpio_toggle(GPIO_PA1);
+    return 0;
+}
 
 
 _attribute_ram_code_ int main (void)    //must run in ramcode
@@ -74,6 +87,10 @@ _attribute_ram_code_ int main (void)    //must run in ramcode
 		user_init_normal ();
 	}
 
+	gpio_set_func(GPIO_PA1, AS_GPIO);
+    gpio_set_output_en(GPIO_PA1, 1);
+
+	blt_soft_timer_add(&gpio_test1, 500000); //7ms <-> 17ms
 
     irq_enable();
 
@@ -83,6 +100,7 @@ _attribute_ram_code_ int main (void)    //must run in ramcode
 		wd_clear(); //clear watch dog
 #endif
 		main_loop ();
+		blt_soft_timer_process(MAINLOOP_ENTRY);
 	}
 }
 
