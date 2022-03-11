@@ -4,3 +4,4 @@ example/mesh
 example/*/out
 study/*/out
 make/__pycache__/
+example/TLSR8253_baremetal
