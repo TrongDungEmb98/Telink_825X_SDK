@@ -5,7 +5,9 @@
 OBJS += \
 $(OUT_PATH)/app.o \
 $(OUT_PATH)/app_att.o \
-$(OUT_PATH)/main.o
+$(OUT_PATH)/main.o \
+$(OUT_PATH)/hal_uart.o\
+$(OUT_PATH)/app_uart.o
 
 
 # Each subdirectory must supply rules for building sources it contributes
