@@ -105,7 +105,7 @@ int uart_putc(char byte) //GPIO simulate uart print func
 	unsigned char  j = 0;
 	unsigned int t1 = 0,t2 = 0;
 
-	//REG_ADDR8(0x582+((DEBUG_INFO_TX_PIN>>8)<<3)) &= ~(DEBUG_INFO_TX_PIN & 0xff) ;//Enable output
+	REG_ADDR8(0x582+((DEBUG_INFO_TX_PIN>>8)<<3)) &= ~(DEBUG_INFO_TX_PIN & 0xff) ;//Enable output
 
 	unsigned int  pcTxReg = (0x583+((DEBUG_INFO_TX_PIN>>8)<<3));//register GPIO output
 	unsigned char tmp_bit0 = read_reg8(pcTxReg) & (~(DEBUG_INFO_TX_PIN & 0xff));
@@ -123,7 +123,7 @@ int uart_putc(char byte) //GPIO simulate uart print func
 	bit[8] = ((byte>>7) & 0x01)? tmp_bit1 : tmp_bit0;
 	bit[9] = tmp_bit1;
 
-	//unsigned char r = irq_disable();
+	unsigned char r = irq_disable();
 	t1 = read_reg32(0x740);
 	for(j = 0;j<10;j++)
 	{
@@ -133,7 +133,7 @@ int uart_putc(char byte) //GPIO simulate uart print func
 		}
 		write_reg8(pcTxReg,bit[j]);        //send bit0
 	}
-	//irq_restore(r);
+	irq_restore(r);
 
 	return byte;
 }
