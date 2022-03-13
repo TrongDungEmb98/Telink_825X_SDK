@@ -247,7 +247,7 @@ enum{
 
 #define	VK_EXT_LEN           2
 typedef struct{
-	u8 val[VK_EXT_LEN];
+	unsigned char val[VK_EXT_LEN];
 }vk_ext_t;
 
 // mulit-byte keycode for media keys, cannot used directly in c code..for reference
