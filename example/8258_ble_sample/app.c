@@ -28,6 +28,7 @@
 #include "tl_common.h"
 #include "vendor/common/blt_common.h"
 #include "vendor/common/blt_led.h"
+#include "app_config.h"
 
 #define ADV_IDLE_ENTER_DEEP_TIME 60   // 60 s
 #define CONN_IDLE_ENTER_DEEP_TIME 60  // 60 s
@@ -35,7 +36,7 @@
 #define MY_DIRECT_ADV_TMIE 2000000
 
 #define MY_APP_ADV_CHANNEL BLT_ENABLE_ADV_ALL
-#define MY_ADV_INTERVAL_MIN ADV_INTERVAL_30MS
+#define MY_ADV_INTERVAL_MIN ADV_INTERVAL_10MS
 #define MY_ADV_INTERVAL_MAX ADV_INTERVAL_35MS
 
 #define MY_RF_POWER_INDEX RF_POWER_P10p46dBm
@@ -73,8 +74,8 @@ _attribute_data_retention_ my_fifo_t blt_txfifo = {
 //	 Adv Packet, Response Packet
 //////////////////////////////////////////////////////////////////////////////
 const u8 tbl_advData[] = {
-    0x05, 0x09, 'k',  'H',  'I',  'D',  0x02,
-    0x01, 0x05,  // BLE limited discoverable mode and BR/EDR not supported
+    0x05, 0x09, 'k',  'H',  'I',  'D',
+    0x02, 0x01, 0x05,  // BLE limited discoverable mode and BR/EDR not supported
     0x03, 0x19, 0x80, 0x01,  // 384, Generic Remote Control, Generic category
     0x05, 0x02, 0x12, 0x18, 0x0F, 0x18,  // incomplete list of service class
                                          // UUIDs (0x1812, 0x180F)
@@ -105,7 +106,7 @@ void app_switch_to_indirect_adv(u8 e, u8 *p, int n)
 
 void ble_remote_terminate(u8 e, u8 *p, int n)  //*p is terminate reason
 {
-	printf("disconnect\n");
+    printf("disconnect\n");
     device_in_connection_state = 0;
 
     if (*p == HCI_ERR_CONN_TIMEOUT) {
@@ -132,7 +133,7 @@ _attribute_ram_code_ void user_set_rf_power(u8 e, u8 *p, int n)
 
 void task_connect(u8 e, u8 *p, int n)
 {
-	printf("new connection\n");
+    printf("new connection\n");
     //	bls_l2cap_requestConnParamUpdate (8, 8, 19, 200);  // 200mS
     bls_l2cap_requestConnParamUpdate(8, 8, 99, 400);  // 1 S
     //	bls_l2cap_requestConnParamUpdate (8, 8, 149, 600);  // 1.5 S
@@ -174,20 +175,22 @@ void user_init_normal(void)
     ////// Controller Initialization  //////////
     blc_ll_initBasicMCU();                  // mandatory
     blc_ll_initStandby_module(mac_public);  // mandatory
-    blc_ll_initAdvertising_module(
-        mac_public);                 // adv module: 		 mandatory for BLE slave,
-    blc_ll_initConnection_module();  // connection module  mandatory for BLE
-                                     // slave/master
-    blc_ll_initSlaveRole_module();  // slave module: 	 mandatory for BLE
-                                    // slave,
-    blc_ll_initPowerManagement_module();  // pm module:      	 optional
+    // adv module: mandatory for BLE slave,
+    blc_ll_initAdvertising_module(mac_public);
+    // connection module  mandatory for BLE slave/master
+    blc_ll_initConnection_module();
+    // slave module: mandatory for BLE slave,
+    blc_ll_initSlaveRole_module();
+    // blc_ll_initPowerManagement_module();  // pm module: optional
 
     ////// Host Initialization  //////////
-    blc_gap_peripheral_init();  // gap initialization
+    // gap initialization
+    blc_gap_peripheral_init();
     extern void my_att_init();
-    my_att_init();  // gatt initialization
-    blc_l2cap_register_handler(
-        blc_l2cap_packet_receive);  // l2cap initialization
+    // gatt initialization
+    my_att_init();
+    // l2cap initialization
+    blc_l2cap_register_handler(blc_l2cap_packet_receive);
 
     // Smp Initialization may involve flash write/erase(when one sector stores
     // too much information,
@@ -259,6 +262,11 @@ void user_init_normal(void)
     bls_app_registerEventCallback(BLT_EV_FLAG_SUSPEND_EXIT, &user_set_rf_power);
 
     // ble event call back
+	 // it is recommended that direct adv only last for several seconds, then
+        // switch to indirect adv
+	bls_ll_setAdvDuration(MY_DIRECT_ADV_TMIE, 1);
+	bls_app_registerEventCallback(BLT_EV_FLAG_ADV_DURATION_TIMEOUT,
+									&app_switch_to_indirect_adv);
     bls_app_registerEventCallback(BLT_EV_FLAG_CONNECT, &task_connect);
     bls_app_registerEventCallback(BLT_EV_FLAG_TERMINATE, &ble_remote_terminate);
 
