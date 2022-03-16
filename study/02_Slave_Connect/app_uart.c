@@ -81,7 +81,7 @@ void at_print(char * str)
 		WaitMs(2);
 	}
 }
-
+void puts(char *s) { at_print(s); }
 void at_send(char * data, u32 len)
 {
 	while(len > UART_DATA_LEN)

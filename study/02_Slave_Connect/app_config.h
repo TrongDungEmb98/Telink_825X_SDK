@@ -75,13 +75,27 @@ typedef enum
 
 	//// SPP ////
 	/**********************************************************************************************/
-	SPP_PS_H, 							 //UUID: 2800, 	VALUE: telink spp service uuid
+	// SPP_PS_H, 							 //UUID: 2800, 	VALUE: telink spp service uuid
+
+	// //server to client
+	// SPP_SERVER_TO_CLIENT_CD_H,		     //UUID: 2803, 	VALUE:  			Prop: read | Notify
+	// SPP_SERVER_TO_CLIENT_DP_H,			 //UUID: telink spp s2c uuid,  VALUE: SppDataServer2ClientData
+	// SPP_SERVER_TO_CLIENT_CCB_H,			 //UUID: 2902, 	VALUE: SppDataServer2ClientDataCCC
+	// SPP_SERVER_TO_CLIENT_DESC_H,		 //UUID: 2901, 	VALUE: TelinkSPPS2CDescriptor
+
+		//// SPP ////
+	/**********************************************************************************************/
+	SPP_PS_H, //UUID: 2800, 	VALUE: telink spp service uuid
 
 	//server to client
-	SPP_SERVER_TO_CLIENT_CD_H,		     //UUID: 2803, 	VALUE:  			Prop: read | Notify
-	SPP_SERVER_TO_CLIENT_DP_H,			 //UUID: telink spp s2c uuid,  VALUE: SppDataServer2ClientData
-	SPP_SERVER_TO_CLIENT_CCB_H,			 //UUID: 2902, 	VALUE: SppDataServer2ClientDataCCC
-	SPP_SERVER_TO_CLIENT_DESC_H,		 //UUID: 2901, 	VALUE: TelinkSPPS2CDescriptor
+	SPP_SERVER_TO_CLIENT_RX_CD_H,	 //UUID: 2803, 	VALUE:  			Prop: read | Notify
+	SPP_SERVER_TO_CLIENT_RX_DP_H,	 //UUID: telink spp s2c  rx uuid,  
+	SPP_SERVER_TO_CLIENT_CCB_H,  //UUID: 2902,	VALUE: SppDataServer2ClientDataCCC
+
+	SPP_SERVER_TO_CLIENT_TX_CD_H,	 //UUID: 2803, 	VALUE:  			Prop: read | Notify
+	SPP_SERVER_TO_CLIENT_TX_DP_H,	//UUID: telink spp s2c  tx uuid,
+	SPP_SERVER_TO_CLIENT_DESC_H, //UUID: 2901, 	VALUE: TelinkSPPS2CDescriptor
+
 
 	ATT_END_H,
 
