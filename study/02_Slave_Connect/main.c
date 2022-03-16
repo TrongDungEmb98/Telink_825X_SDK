@@ -27,7 +27,6 @@
 
 extern void user_init_normal();
 extern void user_init_deepRetn();
-
 extern void main_loop (void);
 
 _attribute_my_ram_code_ void irq_handler(void)
@@ -58,7 +57,6 @@ _attribute_ram_code_ int main (void)    //must run in ramcode
 #endif
 
 	blc_app_loadCustomizedParameters();  //加载频偏电容校准值
-
 	user_init_normal();
 
 	at_print("    \r\nAi-Thinker Ble Demo\r\n");

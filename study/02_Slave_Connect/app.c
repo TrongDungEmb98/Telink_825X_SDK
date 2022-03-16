@@ -91,6 +91,12 @@ void user_init_normal(void)
 	blc_ll_initConnection_module();				//初始化蓝牙连接功能模块
 	blc_ll_initSlaveRole_module();				//初始化蓝牙从机功能模块
 
+	////// Host Initialization  //////////
+	blc_gap_peripheral_init();    //gap initialization
+	extern void my_att_init ();
+	my_att_init (); //gatt initialization
+	blc_l2cap_register_handler(blc_l2cap_packet_receive);  	//l2cap initialization
+
 	blc_smp_setSecurityLevel(No_Security); //设置连接安全级别
 
 	u8 tbl_advData[] = {0x05, 0x09, 'A', 'B', 'C', 'D'}; //要广播的数据
