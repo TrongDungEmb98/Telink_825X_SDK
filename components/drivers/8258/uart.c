@@ -515,7 +515,8 @@ void uart_gpio_set(UART_TxPinDef tx_pin,UART_RxPinDef rx_pin)
 	//note: pullup setting must before uart gpio config, cause it will lead to ERR data to uart RX buffer(confirmed by sihui&sunpeng)
 	//PM_PIN_PULLUP_1M   PM_PIN_PULLUP_10K
 	gpio_setup_up_down_resistor(tx_pin, PM_PIN_PULLUP_10K);  //must, for stability and prevent from current leakage
-	gpio_setup_up_down_resistor(rx_pin, PM_PIN_PULLUP_10K);  //must  for stability and prevent from current leakage
+	/* test_huy */
+	gpio_setup_up_down_resistor(rx_pin, PM_PIN_PULLDOWN_100K);  //must  for stability and prevent from current leakage
 
 
 	gpio_set_func2(tx_pin,AS_UART); // set tx pin
