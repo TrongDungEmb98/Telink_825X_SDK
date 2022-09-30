@@ -29,52 +29,11 @@
 
 void user_init()
 {
-	gpio_set_func(GPIO_PC2, AS_GPIO);
-	gpio_set_func(GPIO_PC3, AS_GPIO);
-	gpio_set_func(GPIO_PC4, AS_GPIO);
-	gpio_set_func(GPIO_PB4, AS_GPIO);
-	gpio_set_func(GPIO_PB5, AS_GPIO);
+	/* LED_PD7 */
+	gpio_set_func(GPIO_PD7, AS_GPIO);
+	gpio_set_output_en(GPIO_PD7, 1);
 
-	gpio_set_output_en(GPIO_PC2, 1);
-	gpio_set_output_en(GPIO_PC3, 1);
-	gpio_set_output_en(GPIO_PC4, 1);
-	gpio_set_output_en(GPIO_PB4, 1);
-	gpio_set_output_en(GPIO_PB5, 1);
 
-	gpio_set_input_en(GPIO_PC2, 0); 
-	gpio_set_input_en(GPIO_PC3, 0); 
-	gpio_set_input_en(GPIO_PC4, 0); 
-	gpio_set_input_en(GPIO_PB4, 0); 
-	gpio_set_input_en(GPIO_PB5, 0); 
-
-	gpio_set_func(GPIO_PD2, AS_GPIO);
-	gpio_setup_up_down_resistor(GPIO_PD2, PM_PIN_PULLUP_10K);
-	gpio_set_output_en(GPIO_PD2, 0);
-	gpio_set_input_en(GPIO_PD2, 1); 	
-}
-
-void my_key_proocess()
-{
-	int c = 20;
-	while (c--)
-	{	
-		if(gpio_read(GPIO_PD2) == 0)
-		{
-			while (gpio_read(GPIO_PD2) == 0){sleep_ms(1);};
-
-			sleep_ms(20);
-			while (1)
-			{
-				if(gpio_read(GPIO_PD2) == 0) 
-				{
-					while (gpio_read(GPIO_PD2) == 0){sleep_ms(1);};
-					return;
-				}
-				sleep_ms(1);
-			}
-		}
-		sleep_ms(10);
-	}
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -82,35 +41,8 @@ void my_key_proocess()
 /////////////////////////////////////////////////////////////////////
 void main_loop ()
 {
-	gpio_write(GPIO_PC2, 1); 
-	gpio_write(GPIO_PC3, 0); 
-	gpio_write(GPIO_PC4, 0); 
-	gpio_write(GPIO_PB4, 0); 
-	gpio_write(GPIO_PB5, 0);  my_key_proocess();
-
-	gpio_write(GPIO_PC2, 0); 
-	gpio_write(GPIO_PC3, 1); 
-	gpio_write(GPIO_PC4, 0); 
-	gpio_write(GPIO_PB4, 0); 
-	gpio_write(GPIO_PB5, 0); my_key_proocess();
-
-	gpio_write(GPIO_PC2, 0); 
-	gpio_write(GPIO_PC3, 0); 
-	gpio_write(GPIO_PC4, 1); 
-	gpio_write(GPIO_PB4, 0); 
-	gpio_write(GPIO_PB5, 0); my_key_proocess();
-
-	gpio_write(GPIO_PC2, 0); 
-	gpio_write(GPIO_PC3, 0); 
-	gpio_write(GPIO_PC4, 0); 
-	gpio_write(GPIO_PB4, 1); 
-	gpio_write(GPIO_PB5, 0); my_key_proocess();
-
-	gpio_write(GPIO_PC2, 0); 
-	gpio_write(GPIO_PC3, 0); 
-	gpio_write(GPIO_PC4, 0); 
-	gpio_write(GPIO_PB4, 0); 
-	gpio_write(GPIO_PB5, 5); my_key_proocess();
+	gpio_toggle(GPIO_PD7);
+	sleep_ms(500);
 }
 
 _attribute_ram_code_ void irq_handler(void)
@@ -151,7 +83,9 @@ _attribute_ram_code_ int main (void)    //must run in ramcode
 #if (MODULE_WATCHDOG_ENABLE)
 		wd_clear(); //clear watch dog
 #endif
-		main_loop ();
+
+		main_loop();
+		
 	}
 }
 
